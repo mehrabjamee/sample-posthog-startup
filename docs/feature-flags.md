@@ -9,7 +9,7 @@ This document tracks feature flags used in `sample-posthog-startup`.
 - Created: 2025-08-18
 - Purpose: move billing quotes from legacy seat + overage model to new pricing and discount engine
 - Usage:
-  - Backend billing logic branch and analytics capture
+  - Backend billing logic branch
   - Frontend conditional render (`NewBilling` vs `LegacyBilling`)
 - Cleanup note: remove after full rollout and delete legacy branch + related tests
 

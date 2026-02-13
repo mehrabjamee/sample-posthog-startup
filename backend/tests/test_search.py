@@ -8,19 +8,9 @@ from app.main import app
 class MockPostHogClient:
     def __init__(self, flags: dict[str, bool]) -> None:
         self.flags = flags
-        self.events: list[dict[str, object]] = []
 
     def is_feature_enabled(self, flag_key: str, distinct_id: str) -> bool:
         return bool(self.flags.get(flag_key, False))
-
-    def capture(self, distinct_id: str, event: str, properties: dict | None = None) -> None:
-        self.events.append(
-            {
-                "distinct_id": distinct_id,
-                "event": event,
-                "properties": properties or {},
-            }
-        )
 
 
 def test_search_legacy_ranking_order():
@@ -33,10 +23,9 @@ def test_search_legacy_ranking_order():
     assert res.status_code == 200
     body = res.json()
     assert [item["id"] for item in body["results"]] == ["p1", "p2", "p3"]
-    assert mock.events == []
 
 
-def test_search_experiment_ranking_capture_and_order():
+def test_search_experiment_ranking_order():
     mock = MockPostHogClient(flags={EXP_SEARCH_RANKING: True})
     app.dependency_overrides[get_posthog_client] = lambda: mock
     client = TestClient(app)
@@ -46,4 +35,3 @@ def test_search_experiment_ranking_capture_and_order():
     assert res.status_code == 200
     body = res.json()
     assert [item["id"] for item in body["results"]] == ["p3", "p1", "p2"]
-    assert mock.events[-1]["event"] == "search_ranking_experiment_seen"

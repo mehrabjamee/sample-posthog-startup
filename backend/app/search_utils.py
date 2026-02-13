@@ -44,11 +44,6 @@ def rank_results(
             return (0, pos, item["id"])
 
         ranked = sorted(CATALOG, key=score)
-        posthog_client.capture(
-            distinct_id,
-            "search_ranking_experiment_seen",
-            {"query": query, "algorithm": "exp-v2"},
-        )
         return [item for item in ranked if query_l in (item["title"] + item["summary"]).lower()]
 
     # Legacy rank: stable id order with simple query filter.

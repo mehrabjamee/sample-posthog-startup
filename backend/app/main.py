@@ -75,8 +75,6 @@ def search(
 
 @app.get("/admin/debug")
 def admin_debug(
-    distinct_id: str = Depends(require_debug_access),
-    posthog_client: PostHogClientProtocol = Depends(get_posthog_client),
+    _: str = Depends(require_debug_access),
 ) -> dict[str, str | int]:
-    posthog_client.capture(distinct_id, "admin_debug_viewed", {"route": "/admin/debug"})
     return {"status": "visible", "active_incidents": 0}

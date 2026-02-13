@@ -40,11 +40,6 @@ def calculate_invoice_total(
                 discount = int(total * 0.1)
 
         total_after_discount = max(total - discount, 0)
-        posthog_client.capture(
-            invoice.distinct_id,
-            "billing_new_flow_quote_created",
-            {"subtotal": total, "discount": discount},
-        )
         return {
             "flow": "new",
             "subtotal": total,

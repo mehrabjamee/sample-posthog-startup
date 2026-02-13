@@ -5,9 +5,21 @@ from app.posthog_client import PostHogClientProtocol
 
 
 CATALOG = [
-    {"id": "p1", "title": "Realtime Product Analytics", "summary": "Track events"},
-    {"id": "p2", "title": "Feature Flags for SaaS", "summary": "Progressive rollout"},
-    {"id": "p3", "title": "Session Replay", "summary": "Understand friction"},
+    {
+        "id": "p1",
+        "title": "Pottery Basics: Wheel Throwing",
+        "summary": "Hands-on class for first-time ceramicists",
+    },
+    {
+        "id": "p2",
+        "title": "Night Sky Sketching",
+        "summary": "Guided drawing workshop for curious class-goers",
+    },
+    {
+        "id": "p3",
+        "title": "Bread Science Lab",
+        "summary": "Weekend class on fermentation with take-home starter",
+    },
 ]
 
 
@@ -23,17 +35,13 @@ def rank_results(
     query_l = query.lower()
 
     if posthog_client.is_feature_enabled(EXP_SEARCH_RANKING, distinct_id):
-        # Experimental rank: title prefix matches > title contains > summary contains.
-        def score(item: dict[str, str]) -> tuple[int, int]:
-            title = item["title"].lower()
-            summary = item["summary"].lower()
-            if title.startswith(query_l):
-                return (0, len(title))
-            if query_l in title:
-                return (1, len(title))
-            if query_l in summary:
-                return (2, len(summary))
-            return (3, 999)
+        # Experimental rank: prioritize earlier term position across title+summary.
+        def score(item: dict[str, str]) -> tuple[int, int, str]:
+            text = f"{item['title']} {item['summary']}".lower()
+            pos = text.find(query_l)
+            if pos == -1:
+                return (1, 999, item["id"])
+            return (0, pos, item["id"])
 
         ranked = sorted(CATALOG, key=score)
         posthog_client.capture(

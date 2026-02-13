@@ -8,9 +8,9 @@ export function OnboardingFlow() {
       <section>
         <h3>Onboarding</h3>
         <ol>
-          <li>Connect data source</li>
-          <li>Install JS snippet</li>
-          <li>Invite team</li>
+          <li>Choose your top class interests</li>
+          <li>Set your weekly availability</li>
+          <li>Pick a home neighborhood</li>
         </ol>
       </section>
     );
@@ -20,9 +20,9 @@ export function OnboardingFlow() {
     <section>
       <h3>Onboarding v2</h3>
       <ol>
-        <li>Start from a template workspace</li>
-        <li>Enable product analytics + replay in one click</li>
-        <li>Launch first feature flag experiment</li>
+        <li>Select your learning goal for this month</li>
+        <li>Get a personalized class track in one click</li>
+        <li>Book your first workshop with a new-member credit</li>
       </ol>
     </section>
   );

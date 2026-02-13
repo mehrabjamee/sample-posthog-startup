@@ -1,21 +1,50 @@
-const localFlags = {
-  "new-billing-flow": false,
-  "onboarding-v2": false,
-  "exp-search-ranking": false
-};
+class BrowserPostHogClient {
+  constructor(posthogInstance) {
+    this.posthog = posthogInstance;
+  }
 
-const listeners = new Set();
+  isFeatureEnabled(flagKey) {
+    if (!this.posthog || typeof this.posthog.isFeatureEnabled !== "function") {
+      return false;
+    }
+    return Boolean(this.posthog.isFeatureEnabled(flagKey));
+  }
 
-export function setLocalFeatureFlag(flagKey, enabled) {
-  localFlags[flagKey] = Boolean(enabled);
-  listeners.forEach((listener) => listener());
+  subscribe(callback) {
+    if (!this.posthog || typeof this.posthog.onFeatureFlags !== "function") {
+      return () => {};
+    }
+
+    this.posthog.onFeatureFlags(() => {
+      callback();
+    });
+
+    return () => {};
+  }
+}
+
+function createClient() {
+  return new BrowserPostHogClient(window.posthog);
+}
+
+let activeClient;
+
+export function initializePostHogClient(client = createClient()) {
+  activeClient = client;
+  return activeClient;
+}
+
+function getClient() {
+  if (!activeClient) {
+    activeClient = createClient();
+  }
+  return activeClient;
 }
 
 export function isFeatureEnabled(flagKey) {
-  return Boolean(localFlags[flagKey]);
+  return getClient().isFeatureEnabled(flagKey);
 }
 
 export function subscribeToFlags(callback) {
-  listeners.add(callback);
-  return () => listeners.delete(callback);
+  return getClient().subscribe(callback);
 }

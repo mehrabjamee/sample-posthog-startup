@@ -13,7 +13,7 @@ This repository is intentionally structured so automated flag removal (for examp
 ## Repository layout
 
 - `backend/` FastAPI service, feature flag wrappers, tests
-- `frontend/` React app with local feature flag wrapper and hook
+- `frontend/` React app using PostHog feature flag wrapper and hook
 - `docs/` feature flag inventory and lifecycle notes
 
 ## Install uv (brief)
@@ -31,7 +31,13 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```bash
 cd backend
 uv sync --extra dev
-uv run uvicorn app.main:app --reload
+POSTHOG_API_KEY=phc_xxx uv run uvicorn app.main:app --reload
+```
+
+Optional host override:
+
+```bash
+POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 Backend tests:
@@ -56,6 +62,10 @@ npm install
 npm run dev
 ```
 
+Frontend integration note:
+- Frontend flags are read from `window.posthog.isFeatureEnabled(...)`.
+- Initialize PostHog in your app shell and identify the user before rendering.
+
 Optional frontend tests:
 
 ```bash
@@ -65,8 +75,8 @@ npm test
 
 ## How feature flags are used
 
-- Backend uses a `PostHogClientProtocol` with a default `FakePostHogClient` so local dev/tests do not require credentials.
-- Frontend uses a small local wrapper (`isFeatureEnabled`, `useFeatureFlag`) that mirrors real PostHog usage patterns.
+- Backend uses a `PostHogClientProtocol` with a real PostHog client adapter.
+- Frontend uses a small wrapper (`isFeatureEnabled`, `useFeatureFlag`) over browser PostHog.
 - Flags are used across direct branches, helper wrappers, dependency guards, and nested conditionals.
 
 Recommended demo flag for automated removal: `new-billing-flow`.

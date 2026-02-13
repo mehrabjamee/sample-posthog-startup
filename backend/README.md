@@ -6,7 +6,13 @@ FastAPI service for the sample startup app.
 
 ```bash
 uv sync --extra dev
-uv run uvicorn app.main:app --reload
+POSTHOG_API_KEY=phc_xxx uv run uvicorn app.main:app --reload
+```
+
+Optional host override:
+
+```bash
+POSTHOG_HOST=https://us.i.posthog.com
 ```
 
 ## Test

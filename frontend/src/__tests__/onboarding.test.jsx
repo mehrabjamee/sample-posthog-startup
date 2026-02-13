@@ -1,12 +1,25 @@
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { OnboardingFlow } from "../components/OnboardingFlow";
-import { setLocalFeatureFlag } from "../lib/posthog";
+import { initializePostHogClient } from "../lib/posthog";
 
 
 describe("OnboardingFlow", () => {
+  let onboardingEnabled = false;
+
+  beforeEach(() => {
+    onboardingEnabled = false;
+    initializePostHogClient({
+      isFeatureEnabled: (flagKey) => {
+        if (flagKey === "onboarding-v2") return onboardingEnabled;
+        return false;
+      },
+      subscribe: () => () => {},
+    });
+  });
+
   it("shows v1 when onboarding-v2 is disabled", () => {
-    setLocalFeatureFlag("onboarding-v2", false);
+    onboardingEnabled = false;
     render(<OnboardingFlow />);
 
     expect(screen.getByText("Onboarding")).toBeInTheDocument();
@@ -14,7 +27,7 @@ describe("OnboardingFlow", () => {
   });
 
   it("shows v2 when onboarding-v2 is enabled", () => {
-    setLocalFeatureFlag("onboarding-v2", true);
+    onboardingEnabled = true;
     render(<OnboardingFlow />);
 
     expect(screen.getByText("Onboarding v2")).toBeInTheDocument();

@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-from app.posthog_client import FakePostHogClient, PostHogClientProtocol
+from functools import lru_cache
 
-_posthog_singleton = FakePostHogClient()
+from app.posthog_client import PostHogClientProtocol, create_posthog_client_from_env
 
 
+@lru_cache(maxsize=1)
 def get_posthog_client() -> PostHogClientProtocol:
-    """Dependency boundary where a real PostHog client can be injected later."""
+    """Dependency boundary for PostHog client injection."""
 
-    return _posthog_singleton
+    return create_posthog_client_from_env()

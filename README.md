@@ -28,16 +28,17 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ## Backend setup and run
 
+Create `backend/.env.local`:
+
+```bash
+POSTHOG_API_KEY=phc_xxx
+POSTHOG_HOST=https://us.i.posthog.com
+```
+
 ```bash
 cd backend
 uv sync --extra dev
-POSTHOG_API_KEY=phc_xxx uv run uvicorn app.main:app --reload
-```
-
-Optional host override:
-
-```bash
-POSTHOG_HOST=https://us.i.posthog.com
+uv run uvicorn app.main:app --reload
 ```
 
 Backend tests:
@@ -75,9 +76,9 @@ npm test
 
 ## How feature flags are used
 
-- Backend uses a `PostHogClientProtocol` with a real PostHog client adapter.
+- Backend uses a `PostHogClientProtocol` with a real PostHog client.
 - Frontend uses a small wrapper (`isFeatureEnabled`, `useFeatureFlag`) over browser PostHog.
-- Flags are used across direct branches, helper wrappers, dependency guards, and nested conditionals.
+- Flags are used across direct branches, dependency guards, and nested conditionals.
 
 Recommended demo flag for automated removal: `new-billing-flow`.
 

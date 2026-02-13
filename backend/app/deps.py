@@ -3,9 +3,14 @@ from __future__ import annotations
 import os
 from functools import lru_cache
 
+from dotenv import load_dotenv
 from posthog import Posthog
 
 from app.posthog_client import PostHogClientProtocol
+
+# Load local env files for developer convenience.
+load_dotenv(".env.local")
+load_dotenv(".env")
 
 
 @lru_cache(maxsize=1)

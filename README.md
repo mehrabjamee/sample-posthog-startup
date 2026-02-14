@@ -13,7 +13,7 @@ This repository is intentionally structured so automated flag removal (for examp
 ## Repository layout
 
 - `backend/` FastAPI service, feature flag wrappers, tests
-- `frontend/` React app using PostHog feature flag wrapper and hook
+- `frontend/` React app using PostHog React hooks
 - `docs/` feature flag inventory and lifecycle notes
 
 ## Install uv (brief)
@@ -64,8 +64,8 @@ npm run dev
 ```
 
 Frontend integration note:
-- Frontend flags are read from `window.posthog.isFeatureEnabled(...)`.
-- Initialize PostHog in your app shell and identify the user before rendering.
+- Frontend flags are read with `useFeatureFlagEnabled(...)` from `@posthog/react`.
+- PostHog is initialized in `frontend/src/main.jsx` and provided via `PostHogProvider`.
 
 Optional frontend tests:
 
@@ -77,7 +77,7 @@ npm test
 ## How feature flags are used
 
 - Backend uses a `PostHogClientProtocol` with a real PostHog client.
-- Frontend uses a small wrapper (`isFeatureEnabled`, `useFeatureFlag`) over browser PostHog.
+- Frontend uses PostHog React hooks directly (`useFeatureFlagEnabled`).
 - Flags are used across direct branches, dependency guards, and nested conditionals.
 
 Recommended demo flag for automated removal: `new-billing-flow`.

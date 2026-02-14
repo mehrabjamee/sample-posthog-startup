@@ -1,21 +1,20 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { OnboardingFlow } from "../components/OnboardingFlow";
-import { initializePostHogClient } from "../lib/posthog";
+
+let onboardingEnabled = false;
+
+vi.mock("@posthog/react", () => ({
+  useFeatureFlagEnabled: (flagKey) => {
+    if (flagKey === "onboarding-v2") return onboardingEnabled;
+    return false;
+  },
+}));
 
 
 describe("OnboardingFlow", () => {
-  let onboardingEnabled = false;
-
   beforeEach(() => {
     onboardingEnabled = false;
-    initializePostHogClient({
-      isFeatureEnabled: (flagKey) => {
-        if (flagKey === "onboarding-v2") return onboardingEnabled;
-        return false;
-      },
-      subscribe: () => () => {},
-    });
   });
 
   it("shows v1 when onboarding-v2 is disabled", () => {

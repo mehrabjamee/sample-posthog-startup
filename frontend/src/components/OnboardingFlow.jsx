@@ -1,7 +1,7 @@
-import { useFeatureFlag } from "../lib/useFeatureFlag";
+import { useFeatureFlagEnabled } from "@posthog/react";
 
 export function OnboardingFlow() {
-  const enabled = useFeatureFlag("onboarding-v2");
+  const enabled = useFeatureFlagEnabled("onboarding-v2");
 
   if (!enabled) {
     return (

@@ -20,7 +20,7 @@ This document tracks feature flags used in `sample-posthog-startup`.
 - Created: 2025-09-01
 - Purpose: compare guided onboarding v2 to existing onboarding flow
 - Usage:
-  - Frontend hook-based gate (`useFeatureFlag("onboarding-v2")`)
+  - Frontend hook-based gate (`useFeatureFlagEnabled("onboarding-v2")`)
 
 ## `debug-admin-panel`
 

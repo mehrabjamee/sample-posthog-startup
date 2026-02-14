@@ -1,21 +1,4 @@
-import { useFeatureFlagEnabled } from "@posthog/react";
-
 export function OnboardingFlow() {
-  const enabled = useFeatureFlagEnabled("onboarding-v2");
-
-  if (!enabled) {
-    return (
-      <section>
-        <h3>Onboarding</h3>
-        <ol>
-          <li>Choose your top class interests</li>
-          <li>Set your weekly availability</li>
-          <li>Pick a home neighborhood</li>
-        </ol>
-      </section>
-    );
-  }
-
   return (
     <section>
       <h3>Onboarding v2</h3>

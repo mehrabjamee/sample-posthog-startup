@@ -1,34 +1,10 @@
 import { render, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { OnboardingFlow } from "../components/OnboardingFlow";
 
-let onboardingEnabled = false;
-
-vi.mock("@posthog/react", () => ({
-  useFeatureFlagEnabled: (flagKey) => {
-    if (flagKey === "onboarding-v2") return onboardingEnabled;
-    return false;
-  },
-}));
-
-
 describe("OnboardingFlow", () => {
-  beforeEach(() => {
-    onboardingEnabled = false;
-  });
-
-  it("shows v1 when onboarding-v2 is disabled", () => {
-    onboardingEnabled = false;
+  it("shows v2 onboarding", () => {
     render(<OnboardingFlow />);
-
-    expect(screen.getByText("Onboarding")).toBeInTheDocument();
-    expect(screen.queryByText("Onboarding v2")).not.toBeInTheDocument();
-  });
-
-  it("shows v2 when onboarding-v2 is enabled", () => {
-    onboardingEnabled = true;
-    render(<OnboardingFlow />);
-
     expect(screen.getByText("Onboarding v2")).toBeInTheDocument();
   });
 });

@@ -13,15 +13,6 @@ This document tracks feature flags used in `sample-posthog-startup`.
   - Frontend conditional render (`NewBilling` vs `LegacyBilling`)
 - Cleanup note: remove after full rollout and delete legacy branch + related tests
 
-## `onboarding-v2`
-
-- Owner: `growth@startup.dev`
-- Intended lifecycle: experiment
-- Created: 2025-09-01
-- Purpose: compare guided onboarding v2 to existing onboarding flow
-- Usage:
-  - Frontend hook-based gate (`useFeatureFlagEnabled("onboarding-v2")`)
-
 ## `debug-admin-panel`
 
 - Owner: `platform@startup.dev`
